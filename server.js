@@ -7,7 +7,7 @@ const app = express();
 
 const { Client, RichEmbed } = require('discord.js');
 var client = new Client();
-var token = "NjE3NzgyNTg1NTk0MjE2NDQ4.XWwI9w.RhCEqTD30HpJCmij0P9McxQZq5E"
+var token = "NjE3NzgyNTg1NTk0MjE2NDQ4.XWwI9w.RhCEqTD30HpJCmij0P9McxQZq5E"+"/exec"
 var scriptID = "AKfycbxQeVF4720epXP3Bc-x0vP1V6MUBKcMj3dy358XTdhewKiluHDY"
 async function startApp () {
     client.login(token)

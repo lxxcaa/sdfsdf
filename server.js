@@ -32,21 +32,15 @@ client.on('message', (message) => {
     if (message.author.id != 617782585594216448) { // Dont answer yourself.
         const args = message.content.slice(prefix.length).split(' ');
         if (isCommand("Ban", message)) {
-            console.log("Banning player " + args[1]);
-            message.channel.send("Banning player " + args[1]);
-            axios.post("https://script.google.com/macros/s/" + scriptID + "?sheet=Global&key=" + args[1] + "&value=" + true,{});
-            /*$.ajax({
-                url: "https://script.google.com/macros/s/" + scriptID,
-                data: {
-                    "sheet=": "Global",
-                    "&key": args[1],
-                    "&value": true
-                },
-                type: "POST",
-                dataType: "xml",
-            });*/
-        } else if (isCommand("Test", message)) {
-            console.log("Test command");
+            console.log("Banning player UserId " + args[1]);
+            message.channel.send("Banning player UserId " + args[1]);
+            axios.post("https://script.google.com/macros/s/" + scriptID + "?sheet=Global&key=" + args[1] + "&value=" + true, {});
+          //Unban the user
+        } else if (isCommand("Unban", message)) {
+            console.log("Unbanning player UserId " + args[1]);
+            message.channel.send("Unbanning UserId " + args[1]);
+            axios.post("https://script.google.com/macros/s/" + scriptID + "?sheet=Global&key=" + args[1], {});
+            
         }
     }
 });

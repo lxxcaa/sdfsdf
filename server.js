@@ -12,11 +12,24 @@ async function startApp () {
     client.login(token)
     console.log("Successfully logged Discord bot in");
 }
-
+startApp();
 client.on("ready", () => {
-  
-}
+  console.log("Ready");
+})
           
+var prefix = ';';
+
+function isCommand(command, message ){
+	var command = command.toLowerCase();
+	var content = message.content.toLowerCase();
+	return content.startsWith(prefix + command);
+}
+client.on('message', (message) => {
+	if (message.author.id == 617782585594216448) { // Dont answer yourself.
+      console.log("Yee");
+      console.log(isCommand("Bruh",message));
+    }
+});
 
 // we've started you off with Express, 
 // but feel free to use whatever libs or frameworks you'd like through `package.json`.

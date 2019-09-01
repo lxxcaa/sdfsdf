@@ -2,17 +2,16 @@
 // where your node app starts
 //
 // init project
-
 const express = require('express');
 const app = express();
-
+const axios = require('axios');
 const {
     Client,
     RichEmbed
 } = require('discord.js');
 var client = new Client();
 var token = "NjE3NzgyNTg1NTk0MjE2NDQ4.XWwI9w.RhCEqTD30HpJCmij0P9McxQZq5E"
-var scriptID = "AKfycbxQeVF4720epXP3Bc-x0vP1V6MUBKcMj3dy358XTdhewKiluHDY" + "/exec"
+var scriptID = "AKfycbxQeVF4720epXP3Bc-x0vP1V6MUBKcMj3dy358XTdhewKiluHDY" + 
 async function startApp() {
     client.login(token)
     console.log("Successfully logged Discord bot in");
@@ -35,7 +34,16 @@ client.on('message', (message) => {
         if (isCommand("Ban", message)) {
             console.log("Banning player " + args[1]);
             message.channel.send("Banning player " + args[1]);
-            $.ajax({
+            axios.post("https://script.google.com/macros/s/" + scriptID, {
+              data: {
+                  "sheet=": "Global",
+                  "&key": args[1],
+                  "&value": true
+              },
+              method: "POST",
+              //dataType: "xml",
+            })
+            /*$.ajax({
                 url: "https://script.google.com/macros/s/" + scriptID,
                 data: {
                     "sheet=": "Global",
@@ -44,7 +52,7 @@ client.on('message', (message) => {
                 },
                 type: "POST",
                 dataType: "xml",
-            });
+            });*/
         } else if (isCommand("Test", message)) {
             console.log("Test command");
         }

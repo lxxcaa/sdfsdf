@@ -2,6 +2,8 @@
 // where your node app starts
 //Stratiz X Kensizo
 // init project
+
+// This project has some default code that glitch likes to throw in.
 const express = require('express');
 const app = express();
 const axios = require('axios');
@@ -55,7 +57,7 @@ app.get('/', function(request, response) {
     response.sendFile(__dirname + '/views/index.html');
 });
 
-// listen for requests :)
+// listen for requests & Keep bot alive
 const http = require('http');
 var listener = app.listen(process.env.PORT, function() {
     setInterval(() => {

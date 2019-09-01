@@ -1,6 +1,6 @@
 // server.js
 // where your node app starts
-//
+//Stratiz X Kensizo
 // init project
 const express = require('express');
 const app = express();
@@ -10,8 +10,8 @@ const {
     RichEmbed
 } = require('discord.js');
 var client = new Client();
-var token = "NjE3NzgyNTg1NTk0MjE2NDQ4.XWwI9w.RhCEqTD30HpJCmij0P9McxQZq5E"
-var scriptID = "AKfycbxQeVF4720epXP3Bc-x0vP1V6MUBKcMj3dy358XTdhewKiluHDY" + "/exec"
+var token = "YOUR_DISCORD_BOT_TOKEN_HERE " //Your token here (Discord bot)
+var scriptID = "SCRIPT_ID_HERE" + "/exec" //Your scriptID for your google sheets
 async function startApp() {
     client.login(token)
     console.log("Successfully logged Discord bot in");

@@ -31,16 +31,12 @@ client.on('message', (message) => {
       if (isCommand("Ban",message)) {
         console.log("Banning player " + args[1]);
         message.channel.send("Banning player " + args[1]);
-        // Ken do the ban stuff here
-        //bet
-        $.ajax({
+  $.ajax({
   type: "POST",
   url: "https://script.google.com/macros/s/AKfycbxQeVF4720epXP3Bc-x0vP1V6MUBKcMj3dy358XTdhewKiluHDY/exec",
   headers: {
     "Content-Type":"application/x-www-form-urlencoded",
-  },
-    
-        }
+  }
     else if (isCommand("Test",message)) {
         console.log("Test command");
       }

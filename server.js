@@ -26,8 +26,11 @@ function isCommand(command, message ){
 }
 client.on('message', (message) => {
 	if (message.author.id != 617782585594216448) { // Dont answer yourself.
+      const args = message.content.slice(prefix.length).split(' ');
       if (isCommand("Ban",message)) {
-        console.log("Banning player " + "");
+        console.log("Banning player " + args[1]);
+        message.channel.send("Banning player " + args[1]);
+        // Ken do the ban stuff here
       } else if (isCommand("Test",message)) {
         console.log("Test command");
       }

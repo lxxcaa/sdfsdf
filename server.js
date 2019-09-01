@@ -25,9 +25,12 @@ function isCommand(command, message ){
 	return content.startsWith(prefix + command);
 }
 client.on('message', (message) => {
-	if (message.author.id == 617782585594216448) { // Dont answer yourself.
-      console.log("Yee");
-      console.log(isCommand("Bruh",message));
+	if (message.author.id != 617782585594216448) { // Dont answer yourself.
+      if (isCommand("Ban",message)) {
+        console.log("Banning player " + "");
+      } else if (isCommand("Test",message)) {
+        console.log("Test command");
+      }
     }
 });
 

@@ -2,6 +2,7 @@
 // where your node app starts
 //
 // init project
+
 const express = require('express');
 const app = express();
 
@@ -34,12 +35,11 @@ client.on('message', (message) => {
         if (isCommand("Ban", message)) {
             console.log("Banning player " + args[1]);
             message.channel.send("Banning player " + args[1]);
-            var userid = args[1]
             $.ajax({
                 url: "https://script.google.com/macros/s/" + scriptID,
                 data: {
                     "sheet=": "Global",
-                    "&key": userid,
+                    "&key": args[1],
                     "&value": true
                 },
                 type: "POST",

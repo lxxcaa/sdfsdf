@@ -14,6 +14,7 @@ const {
 var client = new Client();
 var token = "YOUR_DISCORD_BOT_TOKEN_HERE " //Your token here (Discord bot)
 var scriptID = "SCRIPT_ID_HERE" + "/exec" //Your scriptID for your google sheets
+var BOTID = 1 // Prevents bot from talking to itself, make sure to put your bots ID there.
 async function startApp() {
     client.login(token)
     console.log("Successfully logged Discord bot in");
@@ -31,7 +32,7 @@ function isCommand(command, message) {
     return content.startsWith(prefix + command);
 }
 client.on('message', (message) => {
-    if (message.author.id != 617782585594216448) { // Dont answer yourself.
+    if (message.author.id != BOTID) { 
         const args = message.content.slice(prefix.length).split(' ');
         if (isCommand("Ban", message)) {
             console.log("Banning player UserId " + args[1]);

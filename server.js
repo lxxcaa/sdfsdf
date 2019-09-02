@@ -11,10 +11,10 @@ const {
     Client,
     RichEmbed
 } = require('discord.js');
-var client = new Client();
-var token = "YOUR_DISCORD_BOT_TOKEN_HERE " //Your token here (Discord bot)
-var scriptID = "SCRIPT_ID_HERE" + "/exec" //Your scriptID for your google sheets
-var BOTID = 1 // Prevents bot from talking to itself, make sure to put your bots ID there.
+let client = new Client();
+let token = "YOUR_DISCORD_BOT_TOKEN_HERE " //Your token here (Discord bot)
+let scriptID = "SCRIPT_ID_HERE" + "/exec" //Your scriptID for your google sheets
+let BOTID = 1 // Prevents bot from talking to itself, make sure to put your bots ID there.
 async function startApp() {
     client.login(token)
     console.log("Successfully logged Discord bot in");
@@ -24,7 +24,7 @@ client.on("ready", () => {
     console.log("Ready");
 })
 
-var prefix = ';';
+let prefix = ';';
 
 function isCommand(command, message) {
     var command = command.toLowerCase();
@@ -60,9 +60,11 @@ app.get('/', function(request, response) {
 
 // listen for requests & Keep bot alive
 const http = require('http');
-var listener = app.listen(process.env.PORT, function() {
+let listener = app.listen(process.env.PORT, function() {
     setInterval(() => {
         http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
     }, 280000);
     console.log('Your app is listening on port ' + listener.address().port);
 });
+
+client.on('error', console.error)

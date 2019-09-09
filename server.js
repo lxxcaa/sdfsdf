@@ -33,6 +33,7 @@ function isCommand(command, message) {
 }
 client.on('message', (message) => {
     if (message.author.id != BOTID) { 
+     if (message.member.roles.some(role => role.name === 'ROLENAME')) {
         const args = message.content.slice(prefix.length).split(' ');
         if (isCommand("Ban", message)) {
             console.log("Banning player UserId " + args[1]);

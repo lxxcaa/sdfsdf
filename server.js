@@ -45,6 +45,7 @@ client.on('message', (message) => {
             message.channel.send("Unbanning UserId " + args[1]);
             axios.post("https://script.google.com/macros/s/" + scriptID + "?sheet=Global&key=" + args[1] + "&value=" + false, {});
         }
+      }
     }
 });
 

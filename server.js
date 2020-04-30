@@ -34,12 +34,12 @@ client.on('message', (message) => {
    if (message.member.roles.some(role => role.name === 'ROLENAME')) {
       const args = message.content.slice(prefix.length).split(' ');
       if (isCommand("Ban", message)) {
-        if (args[1] == "uid") {
+        if (args[1] == "id") {
           
-        } else if (args[1] == "username") {
+        } else if (args[1] == "name") {
           
         } else {
-          
+          message.channel.send("Invalid command: Syntax is `ban name Player12` or `ban id 12342312`");
         }
           console.log("Banning player UserId " + args[1]);
           message.channel.send("Attempting to ban player UserId " + args[1]);

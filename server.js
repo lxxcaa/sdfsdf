@@ -34,6 +34,13 @@ client.on('message', (message) => {
    if (message.member.roles.some(role => role.name === 'ROLENAME')) {
       const args = message.content.slice(prefix.length).split(' ');
       if (isCommand("Ban", message)) {
+        if (args[1] == "uid") {
+          
+        } else if (args[1] == "username") {
+          
+        } else {
+          
+        }
           console.log("Banning player UserId " + args[1]);
           message.channel.send("Attempting to ban player UserId " + args[1]);
         //Unban the user

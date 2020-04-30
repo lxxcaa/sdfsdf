@@ -55,6 +55,8 @@ client.on('message', (message) => {
 app.use(express.static('public'));
 
 app.get('/', function(request, response) {
+    const channel = client.channels.cache.get('<id>');
+    channel.send('<content>');
     response.sendFile(__dirname + '/views/index.html');
 });
 

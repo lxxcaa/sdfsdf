@@ -28,50 +28,41 @@ client.on("ready", () => {
 })
 
 
-function byUID(method,message,args) {
-  const options = {
-    hostname: 'api.roblox.com',
-    port: 443,
-    path: '/users/' + args[2],
-    method: 'GET'
-  }
-  https.get("http")
-  const req = https.request(options, res => {
-    console.log(`statusCode: ${res.statusCode}`)
-    if (res.statusCode == 200) {
-      toBan.push({method: method,type: "uid",value: args[2],cid: message.channel.id});
-    } else {
-      message.channel.send("Invalid userId: " + args[2]);
-    }
-    res.on('data', d => {
-      //process.stdout.write(d)
-    })
-  })
-  req.on('error', error => {
-    console.error(error);
+function byUID(method,args,message) {
+  https.get("https://api.roblox.com/users/" + args[2], (res) => {
+     console.log(`statusCode: ${res.statusCode}`)
+      if (res.statusCode == 200) {
+        toBan.push({method: method,type: "uid",value: args[2],cid: message.channel.id});
+      } else {
+        message.channel.send("Invalid userId: " + args[2]);
+      }
+      res.on('data', d => {
+        //process.stdout.write(d)
+      })
+  }).on('error', error => {
+    console.error("RBLX API (UID) | " + error);
   });
 }
 
-function byUser(method,message,args) {
+function byUser(method,args,message) {
   const options = {
     hostname: 'api.roblox.com',
     port: 443,
     path: '/users/get-by-username?username=' + args[2],
     method: 'GET'
   }
-  const req = https.request(options, res => {
-    console.log(`statusCode: ${res.statusCode}`)
-    if (res.statusCode == 200) {
-      toBan.push({method: method,type: "username",value: args[2],cid: message.channel.id});
-    } else {
-      message.channel.send("Invalid username: " + args[2]);
-    }
-    res.on('data', d => {
-      //process.stdout.write(d)
-    })
-  })
-  req.on('error', error => {
-    console.error(error);
+  https.get("https://api.roblox.com/users/get-by-username?username=" + args[2], (res) => {
+     console.log(`statusCode: ${res.statusCode}`)
+      if (res.statusCode == 1) {
+        toBan.push({method: method,type: "username",value: args[2],cid: message.channel.id});
+      } else {
+        message.channel.send("Invalid username: " + args[2]);
+      }
+      res.on('data', d => {
+        message.channel.send(d.Id);
+      })
+  }).on('error', error => {
+    console.error("RBLX API (Username) | " + error);
   });
 }
 

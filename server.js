@@ -3,6 +3,7 @@
 // init project
 const express = require('express');
 var bodyParser = require('body-parser');
+const https = require('https');
 const app = express();
 const {
     Client,
@@ -23,6 +24,30 @@ client.on("ready", () => {
     console.log("Successfully logged Discord bot in");
 })
 
+function banByUID(val,message,args) {
+  const options = {
+    hostname: 'api.roblox.com',
+    port: 443,
+    path: '/users/' + val,
+    method: 'GET'
+  }
+  const req = https.request(options, res => {
+    console.log(`statusCode: ${res.statusCode}`)
+    if (res.statusCode) {
+      
+    }
+
+    res.on('data', d => {
+      //process.stdout.write(d)
+    })
+  })
+
+  req.on('error', error => {
+    console.error(error)
+  })
+
+}
+
 function isCommand(command, message) {
     var command = command.toLowerCase();
     var content = message.content.toLowerCase();
@@ -36,10 +61,11 @@ client.on('message', (message) => {
       if (isCommand("Ban", message)) {
         if (args[1] == "id") {
           message.channel.send("Attempting to ban player with UserId " + args[2]);
-          toBan.push({type: "uid",value: args[2]});
+          toBan.push({method: "ban",type: "uid",value: args[2],cid: message.channel.id});
+          
         } else if (args[1] == "name") {
           message.channel.send("Attempting to ban player with username " + args[2]);
-          toBan.push({type: "username",value: args[2]});
+          toBan.push({method: "ban",type: "username",value: args[2],cid: message.channel.id});
         } else {
           message.channel.send("Invalid command: Syntax is `ban name Player12` or `ban id 12342312`");
         }
@@ -61,7 +87,7 @@ app.get('/', function(request, response) {
 });
 
 // listen for requests & Keep bot alive
-const http = require('http');
+
 let listener = app.listen(process.env.PORT, function() {
     //setInterval(() => { // Used to work sometime ago
     //    http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);

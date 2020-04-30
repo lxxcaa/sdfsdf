@@ -18,34 +18,60 @@ let prefix = ';'; // Discord bot prefix
 
 async function startApp() {
     client.login(token)
+    
 }
 startApp();
 client.on("ready", () => {
-    console.log("Successfully logged Discord bot in");
+  console.log("Successfully logged Discord bot in");
 })
+client.on('error', error => {
+  console.error("Failed to login:" + error);
+});
 
-function banByUID(val,message,args) {
+function byUID(method,message,args) {
   const options = {
     hostname: 'api.roblox.com',
     port: 443,
-    path: '/users/' + val,
+    path: '/users/' + args[2],
     method: 'GET'
   }
   const req = https.request(options, res => {
     console.log(`statusCode: ${res.statusCode}`)
-    if (res.statusCode) {
-      
+    if (res.statusCode == 200) {
+      toBan.push({method: method,type: "uid",value: args[2],cid: message.channel.id});
+    } else {
+      message.channel.send("Invalid userId: " + args[2]);
     }
-
     res.on('data', d => {
       //process.stdout.write(d)
     })
   })
-
   req.on('error', error => {
-    console.error(error)
-  })
+    console.error(error);
+  });
+}
 
+function byUser(method,message,args) {
+  const options = {
+    hostname: 'api.roblox.com',
+    port: 443,
+    path: '/users/get-by-username?username=' + args[2],
+    method: 'GET'
+  }
+  const req = https.request(options, res => {
+    console.log(`statusCode: ${res.statusCode}`)
+    if (res.statusCode == 200) {
+      toBan.push({method: method,type: "username",value: args[2],cid: message.channel.id});
+    } else {
+      message.channel.send("Invalid username: " + args[2]);
+    }
+    res.on('data', d => {
+      //process.stdout.write(d)
+    })
+  })
+  req.on('error', error => {
+    console.error(error);
+  });
 }
 
 function isCommand(command, message) {
@@ -61,11 +87,11 @@ client.on('message', (message) => {
       if (isCommand("Ban", message)) {
         if (args[1] == "id") {
           message.channel.send("Attempting to ban player with UserId " + args[2]);
-          toBan.push({method: "ban",type: "uid",value: args[2],cid: message.channel.id});
+          byUID("Ban",args,message);
           
         } else if (args[1] == "name") {
           message.channel.send("Attempting to ban player with username " + args[2]);
-          toBan.push({method: "ban",type: "username",value: args[2],cid: message.channel.id});
+          byUser("Ban",args,message);
         } else {
           message.channel.send("Invalid command: Syntax is `ban name Player12` or `ban id 12342312`");
         }

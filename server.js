@@ -27,7 +27,7 @@ client.on("ready", () => {
   console.log("Successfully logged Discord bot in");
 })
 
-
+var toBan = [];
 function byUID(method,args,message) {
   https.get("https://api.roblox.com/users/" + args[2], (res) => {
      console.log(`statusCode: ${res.statusCode}`)
@@ -75,7 +75,7 @@ function isCommand(command, message) {
     var content = message.content.toLowerCase();
     return content.startsWith(prefix + command);
 }
-var toBan = [];
+
 client.on('message', (message) => {
   if(message.author.bot) return;
    if (message.member.roles.some(role => role.name === 'ROLENAME')) {
@@ -110,6 +110,7 @@ app.get('/', function(request, response) {
     const channel = client.channels.cache.get('<id>');
     channel.send('<content>');
     response.sendFile(__dirname + '/views/index.html');
+    toBan.shift();
 });
 
 // listen for requests & Keep bot alive

@@ -84,7 +84,6 @@ client.on('message', (message) => {
         if (args[1] == "id") {
           message.channel.send("Attempting to ban player with UserId " + args[2]);
           byUID("Ban",args,message);
-          
         } else if (args[1] == "user") {
           message.channel.send("Attempting to ban player with username " + args[2]);
           byUser("Ban",args,message);
@@ -95,7 +94,6 @@ client.on('message', (message) => {
         if (args[1] == "id") {
           message.channel.send("Attempting to unban player with UserId " + args[2]);
           byUID("Unban",args,message);
-          
         } else if (args[1] == "user") {
           message.channel.send("Attempting to unban player with username " + args[2]);
           byUser("Unban",args,message);

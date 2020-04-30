@@ -1,12 +1,12 @@
 // server.js
 // where your node app starts
-//Stratiz X Kensizo
+// Stratiz X Kensizo v2
 // init project
 
 // This project has some default code that glitch likes to throw in.
 const express = require('express');
+var bodyParser = require('body-parser');
 const app = express();
-const axios = require('axios');
 const {
     Client,
     RichEmbed
@@ -32,19 +32,16 @@ function isCommand(command, message) {
     return content.startsWith(prefix + command);
 }
 client.on('message', (message) => {
-    if (message.author.id != BOTID) { 
-     if (message.member.roles.some(role => role.name === 'ROLENAME')) {
-        const args = message.content.slice(prefix.length).split(' ');
-        if (isCommand("Ban", message)) {
-            console.log("Banning player UserId " + args[1]);
-            message.channel.send("Banning player UserId " + args[1]);
-            axios.post("https://script.google.com/macros/s/" + scriptID + "?sheet=Global&key=" + args[1] + "&value=" + true, {});
-          //Unban the user
-        } else if (isCommand("Unban", message)) {
-            console.log("Unbanning player UserId " + args[1]);
-            message.channel.send("Unbanning UserId " + args[1]);
-            axios.post("https://script.google.com/macros/s/" + scriptID + "?sheet=Global&key=" + args[1] + "&value=" + false, {});
-        }
+  if(message.author.bot) return;
+   if (message.member.roles.some(role => role.name === 'ROLENAME')) {
+      const args = message.content.slice(prefix.length).split(' ');
+      if (isCommand("Ban", message)) {
+          console.log("Banning player UserId " + args[1]);
+          message.channel.send("Banning player UserId " + args[1]);
+        //Unban the user
+      } else if (isCommand("Unban", message)) {
+          console.log("Unbanning player UserId " + args[1]);
+          message.channel.send("Unbanning UserId " + args[1]);
       }
     }
 });

@@ -35,14 +35,15 @@ client.on('message', (message) => {
       const args = message.content.slice(prefix.length).split(' ');
       if (isCommand("Ban", message)) {
         if (args[1] == "id") {
-          
+          message.channel.send("Attempting to ban player with UserId " + args[2]);
+          toBan.push({type: "uid",value: args[2]});
         } else if (args[1] == "name") {
-          
+          message.channel.send("Attempting to ban player with username " + args[2]);
+          toBan.push({type: "username",value: args[2]});
         } else {
           message.channel.send("Invalid command: Syntax is `ban name Player12` or `ban id 12342312`");
         }
-          console.log("Banning player UserId " + args[1]);
-          message.channel.send("Attempting to ban player UserId " + args[1]);
+         
         //Unban the user
       } else if (isCommand("Unban", message)) {
           console.log("Unbanning player UserId " + args[1]);

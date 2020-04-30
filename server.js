@@ -17,16 +17,16 @@ let prefix = ';'; // Discord bot prefix
 /// IMPORTANT ^^^
 
 async function startApp() {
-    client.login(token)
-    
+    var promise = client.login(token)
+    promise.catch(function(error) {
+      console.error("Discord bot login | " + error);
+    });
 }
 startApp();
 client.on("ready", () => {
   console.log("Successfully logged Discord bot in");
 })
-client.on('error', error => {
-  console.error("Failed to login:" + error);
-});
+
 
 function byUID(method,message,args) {
   const options = {
@@ -35,6 +35,7 @@ function byUID(method,message,args) {
     path: '/users/' + args[2],
     method: 'GET'
   }
+  https.get("http")
   const req = https.request(options, res => {
     console.log(`statusCode: ${res.statusCode}`)
     if (res.statusCode == 200) {
@@ -95,15 +96,21 @@ client.on('message', (message) => {
         } else {
           message.channel.send("Invalid command: Syntax is `ban name Player12` or `ban id 12342312`");
         }
-         
-        //Unban the user
       } else if (isCommand("Unban", message)) {
-          console.log("Unbanning player UserId " + args[1]);
-          message.channel.send("Unbanning UserId " + args[1]);
+        if (args[1] == "id") {
+          message.channel.send("Attempting to unban player with UserId " + args[2]);
+          byUID("Unban",args,message);
+          
+        } else if (args[1] == "name") {
+          message.channel.send("Attempting to unban player with username " + args[2]);
+          byUser("Unban",args,message);
+        } else {
+          message.channel.send("Invalid command: Syntax is `unban name Player12` or `unban id 12342312`");
+        }
       }
     }
 });
-
+//
 app.use(express.static('public'));
 
 app.get('/', function(request, response) {

@@ -34,7 +34,7 @@ function byUID(method,args,message) {
       if (res.statusCode == 200) {
         toBan.push({method: method,type: "uid",value: args[2],cid: message.channel.id});
       } else {
-        message.channel.send("Invalid userId: " + args[2]);
+        message.channel.send(method + " failed: Invalid userId " + args[2]);
       }
       res.on('data', d => {
         //process.stdout.write(d)
@@ -52,15 +52,19 @@ function byUser(method,args,message) {
     method: 'GET'
   }
   https.get("https://api.roblox.com/users/get-by-username?username=" + args[2], (res) => {
-     console.log(`statusCode: ${res.statusCode}`)
-      if (res.statusCode == 1) {
-        toBan.push({method: method,type: "username",value: args[2],cid: message.channel.id});
-      } else {
-        message.channel.send("Invalid username: " + args[2]);
-      }
+      console.log(`statusCode: ${res.statusCode}`)
+      let data = '';
       res.on('data', d => {
-        message.channel.send(d.Id);
+        data += d
       })
+      res.on('end', () => {
+        console.log(data);
+        if (JSON.parse(data).Id != undefined) {
+          toBan.push({method: method,type: "username",value: args[2],cid: message.channel.id});
+        } else {
+          message.channel.send(method + " failed: Invalid username " + args[2]);
+        }
+      });
   }).on('error', error => {
     console.error("RBLX API (Username) | " + error);
   });
@@ -81,22 +85,22 @@ client.on('message', (message) => {
           message.channel.send("Attempting to ban player with UserId " + args[2]);
           byUID("Ban",args,message);
           
-        } else if (args[1] == "name") {
+        } else if (args[1] == "user") {
           message.channel.send("Attempting to ban player with username " + args[2]);
           byUser("Ban",args,message);
         } else {
-          message.channel.send("Invalid command: Syntax is `ban name Player12` or `ban id 12342312`");
+          message.channel.send("Invalid command: Syntax is `ban user Player12` or `ban id 12342312`");
         }
       } else if (isCommand("Unban", message)) {
         if (args[1] == "id") {
           message.channel.send("Attempting to unban player with UserId " + args[2]);
           byUID("Unban",args,message);
           
-        } else if (args[1] == "name") {
+        } else if (args[1] == "user") {
           message.channel.send("Attempting to unban player with username " + args[2]);
           byUser("Unban",args,message);
         } else {
-          message.channel.send("Invalid command: Syntax is `unban name Player12` or `unban id 12342312`");
+          message.channel.send("Invalid command: Syntax is `unban user Player12` or `unban id 12342312`");
         }
       }
     }

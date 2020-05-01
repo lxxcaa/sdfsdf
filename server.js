@@ -86,10 +86,10 @@ client.on('message', (message) => {
       const args = message.content.slice(prefix.length).split(' ');
       if (isCommand("Ban", message)) {
         if (args[1] == "id") {
-          message.channel.send("Attempting to ban player with UserId " + args[2]);
+          message.channel.send("Attempting to ban player with UserId " + args[2] + "...");
           byUID("Ban",args,message);
         } else if (args[1] == "user") {
-          message.channel.send("Attempting to ban player with username " + args[2]);
+          message.channel.send("Attempting to ban player with username " + args[2] + "...");
           byUser("Ban",args,message);
         } else {
           message.channel.send("Invalid command: Syntax is `ban user Player12` or `ban id 12342312`");
@@ -114,7 +114,7 @@ app.get('/', function(request, response) {
   if (request.headers.username != undefined) { 
     const channel = client.channels.get(request.headers.cid);
     if (request.headers.rblxerror == undefined) {
-      channel.send('Successfully ' + request.headers.method + ' user ' + request.headers.username + " | ID: " + request.headers.value);
+      channel.send('Successfully ' + request.headers.method + 'ned user ' + request.headers.username + " | ID: " + request.headers.value);
     } else {
       channel.send("Failed to " + request.headers.method + " user: " + request.headers.username + " | ID: " + request.headers.value + " | `Rblx-Error:  " + request.headers.rblxerror + "`"); 
     }

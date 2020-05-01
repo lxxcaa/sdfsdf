@@ -17,6 +17,7 @@ let client = new Client();
 //// IMPORTANT VVV
 let token = process.env.SECRET //Your token goes in key.env (Discord bot)
 let prefix = ';'; // Discord bot prefix
+let rolename = "rolenamehere"
 /// IMPORTANT ^^^
 
 
@@ -85,7 +86,7 @@ function isCommand(command, message) {
 
 client.on('message', (message) => {
   if(message.author.bot) return;
-   if (message.member.roles.some(role => role.name === 'ROLENAME')) {
+   if (message.member.roles.some(role => role.name === rolename)) {
       const args = message.content.slice(prefix.length).split(' ');
       if (isCommand("Ban", message)) {
         if (args[1] == "id") {

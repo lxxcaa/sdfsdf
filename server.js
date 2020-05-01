@@ -11,10 +11,16 @@ const {
 } = require('discord.js');
 let client = new Client();
 
+
+
+
 //// IMPORTANT VVV
 let token = process.env.SECRET //Your token goes in key.env (Discord bot)
 let prefix = ';'; // Discord bot prefix
 /// IMPORTANT ^^^
+
+
+
 
 async function startApp() {
     var promise = client.login(token)
@@ -30,7 +36,6 @@ client.on("ready", () => {
 var toBan = [];
 function byUID(method,args,message) {
   https.get("https://api.roblox.com/users/" + args[2], (res) => {
-     console.log(`statusCode: ${res.statusCode}`)
       
       let data = '';
       res.on('data', d => {
@@ -56,13 +61,11 @@ function byUser(method,args,message) {
     method: 'GET'
   }
   https.get("https://api.roblox.com/users/get-by-username?username=" + args[2], (res) => {
-      console.log(`statusCode: ${res.statusCode}`)
       let data = '';
       res.on('data', d => {
         data += d
       })
       res.on('end', () => {
-        console.log(data);
         if (JSON.parse(data).Id != undefined) {
           toBan.push({method: method,value: JSON.parse(data).Id,username: JSON.parse(data).Username,cid: message.channel.id});
         } else {

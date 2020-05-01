@@ -31,17 +31,17 @@ var toBan = [];
 function byUID(method,args,message) {
   https.get("https://api.roblox.com/users/" + args[2], (res) => {
      console.log(`statusCode: ${res.statusCode}`)
-      if (res.statusCode == 200) {
-        toBan.push({method: method,username: 1,value: args[2],cid: message.channel.id});
-      } else {
-        message.channel.send(method + " failed: Invalid userId " + args[2]);
-      }
+      
       let data = '';
       res.on('data', d => {
         data += d
       })
       res.on('end', () => {
-        
+        if (res.statusCode == 200) {
+          toBan.push({method: method,username: JSON.parse(data).Username,value: args[2],cid: message.channel.id});
+        } else {
+          message.channel.send(method + " failed: Invalid userId " + args[2]);
+        }
       });
   }).on('error', error => {
     console.error("RBLX API (UID) | " + error);
@@ -111,9 +111,13 @@ client.on('message', (message) => {
 app.use(express.static('public'));
 
 app.get('/', function(request, response) {
-  if (request.headers.cid != undefined) {
+  if (request.headers.username != undefined) { 
     const channel = client.channels.cache.get(request.headers.cid);
-    channel.send('Successfully banned user ' + request.headers.name + " | ID: " + request.headers.value);
+    if (request.headers.rblxerror != undefined) {
+      channel.send('Successfully ' + request.headers.method + ' user ' + request.headers.username + " | ID: " + request.headers.value);
+    } else {
+      channel.send("Failed to " + request.headers.method + " user: " + request.headers.username + " | ID: " + request.headers.value + " | `Rblx-Error:  " + request.headers.rblxerror + "`"); 
+    }
   }
   response.send(toBan[0]);
   toBan.shift();

@@ -30,7 +30,7 @@ async function startApp() {
 }
 startApp();
 client.on("ready", () => {
-  console.log("Successfully logged Discord bot in");
+  console.log("Successfully logged in Discord bot.");
 })
 
 var toBan = [];

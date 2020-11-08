@@ -102,7 +102,7 @@ packages:
       long: 4.0.0
       prism-media: 0.0.3
       snekfetch: 3.6.4
-      tweetnacl: 1.0.1
+      tweetnacl: 1.0.3
       ws: 6.2.1
     dev: false
     engines:
@@ -435,10 +435,10 @@ packages:
       node: '>=0.6'
     resolution:
       integrity: sha512-yaOH/Pk/VEhBWWTlhI+qXxDFXlejDGcQipMlyxda9nthulaxLZUNcUqFxokp0vcYnvteJln5FNQDRrxj3YcbVw==
-  /tweetnacl/1.0.1:
+  /tweetnacl/1.0.3:
     dev: false
     resolution:
-      integrity: sha512-kcoMoKTPYnoeS50tzoqjPY3Uv9axeuuFAZY9M/9zFnhoVvRfxz9K29IMPD7jGmt2c8SW7i3gT9WqDl2+nV7p4A==
+      integrity: sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==
   /type-is/1.6.18:
     dependencies:
       media-typer: 0.3.0
@@ -477,6 +477,6 @@ shrinkwrapMinorVersion: 9
 shrinkwrapVersion: 3
 specifiers:
   axios: ^0.19.0
-  discord.js: ^11.5.1
+  discord.js: ~11.5.1
   express: ^4.16.4
   node-js: ^1.0.0

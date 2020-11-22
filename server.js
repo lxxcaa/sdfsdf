@@ -85,7 +85,7 @@ function isCommand(command, message) {
 
 client.on('message', (message) => {
   if(message.author.bot) return;
-   if (message.member.roles.some(role => role.name === rolename)) {
+   if (message.member.roles.cache.some(role => role.name === rolename)) {
       const args = message.content.slice(prefix.length).split(' ');
       if (isCommand("Ban", message)) {
         if (args[1] == "id") {
@@ -115,7 +115,7 @@ app.use(express.static('public'));
 
 app.get('/', function(request, response) {
   if (request.headers.username != undefined) { 
-    const channel = client.channels.get(request.headers.cid);
+    const channel = client.channels.cache.get(request.headers.cid);
     if (request.headers.rblxerror == undefined) {
       channel.send('Successfully ' + request.headers.method + 'ned user ' + request.headers.username + " | ID: " + request.headers.value);
     } else {

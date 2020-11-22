@@ -7,10 +7,9 @@ const https = require('https');
 const app = express();
 const {
     Client,
-    RichEmbed
+    MessageEmbed
 } = require('discord.js');
 let client = new Client();
-
 
 
 
@@ -21,12 +20,12 @@ let rolename = "rolenamehere"
 /// IMPORTANT ^^^
 
 
-
-
 async function startApp() {
     var promise = client.login(token)
+    console.log("Starting...");
     promise.catch(function(error) {
       console.error("Discord bot login | " + error);
+      process.exit(1);
     });
 }
 startApp();

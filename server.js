@@ -19,6 +19,13 @@ let prefix = ';'; // Discord bot prefix
 let rolename = "rolenamehere"
 /// IMPORTANT ^^^
 
+let numbers = [
+  "0️⃣",
+  "1️⃣",
+  "2️⃣",
+  "3️⃣",
+  "4️⃣"
+]
 
 async function startApp() {
     var promise = client.login(token)
@@ -35,6 +42,15 @@ client.on("ready", () => {
 
 var toBan = [];
 function byUID(method,args,message) {
+  const Emb = new MessageEmbed()
+      .setColor('#fff200')
+      //.setTitle(request.headers.username + "'s Data")
+     // .setTitle("Attempt")
+      //.setAuthor('Roblox Error','')
+      .setDescription("Attempting to get data for UserID "+ args[2] +"...")
+      .setTimestamp()
+      .setFooter('Developed by Stratiz');
+    message.edit(Emb);
   https.get("https://api.roblox.com/users/" + args[2], (res) => {
       
       let data = '';
@@ -83,11 +99,68 @@ function isCommand(command, message) {
     return content.startsWith(prefix + command);
 }
 
-client.on('message', (message) => {
+const TookTooLong = new MessageEmbed()
+  .setColor('#eb4034')
+  .setDescription("You took too long to respond!")
+
+
+async function determineType(message,BotMsg,args) {
+  if (isNaN(Number(args[1]))) {
+    byUser("GetData",args[1],BotMsg);
+  } else {
+    const Emb = new MessageEmbed()
+      .setColor('#ea00ff')
+      //.setTitle(request.headers.username + "'s Data")
+      .setTitle("Is this a UserID or a Username?")
+      //.setAuthor('Roblox Error','')
+      .setDescription("Please react with the number that matches the answer.")
+      .addField(numbers[0] + ": Username","This is a players username in game.")
+      .addField(numbers[1] + ": UserID","This is the players UserId connect with the account.")
+      .setTimestamp()
+      .setFooter('Developed by Stratiz');
+    BotMsg.edit(Emb);
+    try {
+      await BotMsg.react(numbers[0]);
+      await BotMsg.react(numbers[1]);
+    } catch (error) {
+      console.error('One of the emojis failed to react.');
+    }
+    const filter = (reaction, user) => {
+      return numbers.includes(reaction.emoji.name) && user.id === message.author.id;
+    };
+    BotMsg.awaitReactions(filter, { max: 1, time: 30000, errors: ['time'] })
+      .then(collected => {
+        const reaction = collected.first();
+        const ind = numbers.findIndex(function(n){
+           return n == reaction.emoji.name;
+        })
+        BotMsg.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
+        if (ind == 0) {
+          byUser("GetData",args[1],BotMsg);
+        } else if (ind == 1) {
+          byUID("GetData",args[1],BotMsg);
+        } else {
+          BotMsg.edit('Something went wrong');
+        }//
+      })
+      .catch(collected => {
+        BotMsg.edit(TookTooLong);
+        BotMsg.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
+      });
+  }
+}
+
+client.on('message', async (message) => {
   if(message.author.bot) return;
    if (message.member.roles.cache.some(role => role.name === rolename)) {
       const args = message.content.slice(prefix.length).split(' ');
+       var Emb = new MessageEmbed()
+          .setColor('#eb4034')
+          .setDescription("Working...")
+
       if (isCommand("Ban", message)) {
+        var BotMsg = await message.channel.send("<@" + message.author.id + ">",Emb);
+        determineType(message);
         if (args[1] == "id") {
           message.channel.send("Attempting to ban player with UserId " + args[2] + "...");
           byUID("Ban",args,message);

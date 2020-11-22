@@ -41,17 +41,17 @@ client.on("ready", () => {
 })
 
 var toBan = [];
-function byUID(method,args,message) {
+function byUID(method,usr,message) {
   const Emb = new MessageEmbed()
       .setColor('#fff200')
       //.setTitle(request.headers.username + "'s Data")
      // .setTitle("Attempt")
       //.setAuthor('Roblox Error','')
-      .setDescription("Attempting to get data for UserID "+ args[2] +"...")
+      .setDescription("Attempting to "+method+" UserID "+ usr +"...")
       .setTimestamp()
       .setFooter('Developed by Stratiz');
     message.edit(Emb);
-  https.get("https://api.roblox.com/users/" + args[2], (res) => {
+  https.get("https://api.roblox.com/users/" + usr, (res) => {
       
       let data = '';
       res.on('data', d => {
@@ -59,9 +59,9 @@ function byUID(method,args,message) {
       })
       res.on('end', () => {
         if (res.statusCode == 200) {
-          toBan.push({method: method,username: JSON.parse(data).Username,value: args[2],cid: message.channel.id});
+          toBan.push({method: method,username: JSON.parse(data).Username,value: usr,cid: message.channel.id});
         } else {
-          message.channel.send(method + " failed: Invalid userId " + args[2]);
+          message.channel.send(method + " failed: Invalid userId " + usr);
         }
       });
   }).on('error', error => {
@@ -69,14 +69,17 @@ function byUID(method,args,message) {
   });
 }
 
-function byUser(method,args,message) {
-  const options = {
-    hostname: 'api.roblox.com',
-    port: 443,
-    path: '/users/get-by-username?username=' + args[2],
-    method: 'GET'
-  }
-  https.get("https://api.roblox.com/users/get-by-username?username=" + args[2], (res) => {
+function byUser(method,usr,message) {
+  const Emb = new MessageEmbed()
+        .setColor('#fff200')
+        //.setTitle(request.headers.username + "'s Data")
+       // .setTitle("Attempt")
+        //.setAuthor('Roblox Error','')
+        .setDescription("Attempting to "+method+" username "+ usr +"...")
+        .setTimestamp()
+        .setFooter('Developed by Stratiz');
+  message.edit(Emb);
+  https.get("https://api.roblox.com/users/get-by-username?username=" + usr, (res) => {
       let data = '';
       res.on('data', d => {
         data += d
@@ -85,7 +88,7 @@ function byUser(method,args,message) {
         if (JSON.parse(data).Id != undefined) {
           toBan.push({method: method,value: JSON.parse(data).Id,username: JSON.parse(data).Username,cid: message.channel.id});
         } else {
-          message.channel.send(method + " failed: Invalid username " + args[2]);
+          message.channel.send(method + " failed: Invalid username " + usr);
         }
       });
   }).on('error', error => {
@@ -104,9 +107,9 @@ const TookTooLong = new MessageEmbed()
   .setDescription("You took too long to respond!")
 
 
-async function determineType(message,BotMsg,args) {
+async function determineType(method,message,BotMsg,args) {
   if (isNaN(Number(args[1]))) {
-    byUser("GetData",args[1],BotMsg);
+    byUser(method,args[1],BotMsg);
   } else {
     const Emb = new MessageEmbed()
       .setColor('#ea00ff')
@@ -136,9 +139,9 @@ async function determineType(message,BotMsg,args) {
         })
         BotMsg.reactions.removeAll().catch(error => console.error('Failed to clear reactions: ', error));
         if (ind == 0) {
-          byUser("GetData",args[1],BotMsg);
+          byUser(method,args[1],BotMsg);
         } else if (ind == 1) {
-          byUID("GetData",args[1],BotMsg);
+          byUID(method,args[1],BotMsg);
         } else {
           BotMsg.edit('Something went wrong');
         }//
@@ -160,26 +163,13 @@ client.on('message', async (message) => {
 
       if (isCommand("Ban", message)) {
         var BotMsg = await message.channel.send("<@" + message.author.id + ">",Emb);
-        determineType(message);
-        if (args[1] == "id") {
-          message.channel.send("Attempting to ban player with UserId " + args[2] + "...");
-          byUID("Ban",args,message);
-        } else if (args[1] == "user") {
-          message.channel.send("Attempting to ban player with username " + args[2] + "...");
-          byUser("Ban",args,message);
-        } else {
-          message.channel.send("Invalid command: Syntax is `ban user Player12` or `ban id 12342312`");
-        }
+        determineType("Ban",message,BotMsg,args);
       } else if (isCommand("Unban", message)) {
-        if (args[1] == "id") {
-          message.channel.send("Attempting to unban player with UserId " + args[2]);
-          byUID("Unban",args,message);
-        } else if (args[1] == "user") {
-          message.channel.send("Attempting to unban player with username " + args[2]);
-          byUser("Unban",args,message);
-        } else {
-          message.channel.send("Invalid command: Syntax is `unban user Player12` or `unban id 12342312`");
-        }
+        var BotMsg = await message.channel.send("<@" + message.author.id + ">",Emb);
+        determineType("Unban",message,BotMsg,args);
+      } else if (isCommand("Kick",message)) {
+        var BotMsg = await message.channel.send("<@" + message.author.id + ">",Emb);
+        determineType("Kick",message,BotMsg,args);
       }
     }
 });
@@ -190,7 +180,7 @@ app.get('/', function(request, response) {
   if (request.headers.username != undefined) { 
     const channel = client.channels.cache.get(request.headers.cid);
     if (request.headers.rblxerror == undefined) {
-      channel.send('Successfully ' + request.headers.method + 'ned user ' + request.headers.username + " | ID: " + request.headers.value);
+      channel.send(request.headers.method + ' successful. | Username: ' + request.headers.username + " | ID: " + request.headers.value);
     } else {
       channel.send("Failed to " + request.headers.method + " user: " + request.headers.username + " | ID: " + request.headers.value + " | `Rblx-Error:  " + request.headers.rblxerror + "`"); 
     }

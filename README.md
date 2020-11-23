@@ -1,4 +1,4 @@
-# DTR V2.1
+# DTR V2.2
 
 Make sure to follow the tutorial on DevForum found [here.](https://devforum.roblox.com/t/v2-discord-to-roblox-ban-bot-100-free-end-user-friendly-stable/553411)
 

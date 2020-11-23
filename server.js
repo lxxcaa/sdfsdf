@@ -40,6 +40,12 @@ client.on("ready", () => {
   console.log("Successfully logged in Discord bot.");
 })
 
+const Invalid = new MessageEmbed()
+  .setColor('#eb4034')
+  .setDescription("Invalid user")
+
+
+
 var toBan = [];
 function byUID(method,usr,message) {
   const Emb = new MessageEmbed()
@@ -59,9 +65,9 @@ function byUID(method,usr,message) {
       })
       res.on('end', () => {
         if (res.statusCode == 200) {
-          toBan.push({method: method,username: JSON.parse(data).Username,value: usr,cid: message.channel.id});
+          toBan.push({method: method,username: JSON.parse(data).Username,value: usr,cid: message.channel.id,mid: message.id});
         } else {
-          message.channel.send(method + " failed: Invalid userId " + usr);
+          message.edit(Invalid);
         }
       });
   }).on('error', error => {
@@ -86,9 +92,9 @@ function byUser(method,usr,message) {
       })
       res.on('end', () => {
         if (JSON.parse(data).Id != undefined) {
-          toBan.push({method: method,value: JSON.parse(data).Id,username: JSON.parse(data).Username,cid: message.channel.id});
+          toBan.push({method: method,value: JSON.parse(data).Id,username: JSON.parse(data).Username,cid: message.channel.id,mid: message.id});
         } else {
-          message.channel.send(method + " failed: Invalid username " + usr);
+          message.edit(Invalid);
         }
       });
   }).on('error', error => {
@@ -176,14 +182,47 @@ client.on('message', async (message) => {
 //
 app.use(express.static('public'));
 
-app.get('/', function(request, response) {
+app.get('/', async function(request, response) {
   if (request.headers.username != undefined) { 
-    const channel = client.channels.cache.get(request.headers.cid);
-    if (request.headers.rblxerror == undefined) {
-      channel.send(request.headers.method + ' successful. | Username: ' + request.headers.username + " | ID: " + request.headers.value);
-    } else {
-      channel.send("Failed to " + request.headers.method + " user: " + request.headers.username + " | ID: " + request.headers.value + " | `Rblx-Error:  " + request.headers.rblxerror + "`"); 
-    }
+    const channel = await client.channels.cache.get(request.headers.cid);
+    channel.messages.fetch(request.headers.mid)
+      .then(msg => {
+        if (request.headers.rblxerror == undefined) {
+          const Emb = new MessageEmbed()
+                .setColor('#00ff44')
+                .setTitle(request.headers.method + " successful. ")
+                .addField('Username',request.headers.username)
+                .addField('UserID',request.headers.value)
+                //.addField('Inline field title', 'Some value here', true)
+                //.setImage('https://www.roblox.com/Thumbs/Avatar.ashx?x=100&y=100&userId='+request.headers.uid)
+                .setTimestamp()
+                .setFooter('Developed by Stratiz');
+              if (msg.author != undefined) {
+                msg.edit(Emb);
+              } else {
+                channel.send(Emb);
+              }
+        } else {
+          const Emb = new MessageEmbed()
+                .setColor('#eb4034')
+                .setTitle(request.headers.method + " failed. ")
+                .addField('Username',request.headers.username)
+                .addField('UserID',request.headers.value)
+                .addField('Rblx-Error',request.headers.rblxerror)
+                //.addField('Inline field title', 'Some value here', true)
+                //.setImage('https://www.roblox.com/Thumbs/Avatar.ashx?x=100&y=100&userId='+request.headers.uid)
+                .setTimestamp()
+                .setFooter('Developed by Stratiz');
+              if (msg.author != undefined) {
+                msg.edit(Emb);
+              } else {
+                channel.send(Emb);
+              }
+        }
+    })
+    .catch( err =>{
+      console.log(err);       
+    });
   }
   response.send(toBan[0]);
   toBan.shift();

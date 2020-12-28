@@ -197,11 +197,11 @@ app.get('/', async function(request, response) {
                 //.setImage('https://www.roblox.com/Thumbs/Avatar.ashx?x=100&y=100&userId='+request.headers.uid)
                 .setTimestamp()
                 .setFooter('Developed by Stratiz');
-              if (msg.author != undefined) {
-                msg.edit(Emb);
-              } else {
-                channel.send(Emb);
-              }
+          if (msg.author != undefined) {
+            msg.edit(Emb);
+          } else {
+            channel.send(Emb);
+          }
         } else {
           const Emb = new MessageEmbed()
                 .setColor('#eb4034')

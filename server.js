@@ -1,4 +1,4 @@
-// Stratiz X Kensizo v2
+// Made by Stratiz
 
 // init project
 const express = require('express');

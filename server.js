@@ -15,8 +15,8 @@ let client = new Client();
 
 //// IMPORTANT VVV
 let token = process.env.SECRET //Your token goes in key.env (Discord bot)
-let prefix = ';'; // Discord bot prefix
-let rolename = "rolenamehere"
+let prefix = '!'; // Discord bot prefix
+let rolename = "Admin"
 /// IMPORTANT ^^^
 
 let numbers = [
@@ -231,9 +231,9 @@ app.get('/', async function(request, response) {
 // listen for requests & Keep bot alive
 
 let listener = app.listen(process.env.PORT, function() {
-    //setInterval(() => { // Used to work sometime ago
-    //    http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
-    //}, 280000);
+    //setInterval(() => { 
+       //http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
+     //280000);
     console.log('Not that it matters but your app is listening on port ' + listener.address().port);
 });
 
